@@ -162,18 +162,6 @@ export default function CreateMessage({ generatedLink }: CreateMessageProps) {
                         </motion.div>
                     )}
                 </motion.div>
-                {/* ✅ Footer (Fixed on Mobile) */}
-                <motion.footer
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8, duration: 0.7 }}
-                    className="absolute bottom-4 px-4 text-center text-sm text-gray-400"
-                >
-                    Made with 🚀 by{' '}
-                    <a href="https://github.com/rheatkhs" className="text-pink-400 underline">
-                        Rhea Takahashi
-                    </a>
-                </motion.footer>
             </motion.div>
         </>
     );

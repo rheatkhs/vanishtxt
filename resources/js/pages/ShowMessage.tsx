@@ -23,29 +23,59 @@ export default function ShowMessage({ message }: ShowMessageProps) {
     return (
         <>
             <Head title="Show Message" />
-            <div className="flex min-h-screen items-center justify-center bg-gray-900 p-6 text-white">
-                <div className="w-full max-w-md rounded-xl bg-gray-800 p-6 shadow-md">
-                    <h1 className="mb-4 text-center text-2xl font-bold">Your Secret Message</h1>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1.2, ease: 'easeInOut' }}
+                className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#0a0218] to-[#1b0c3b] px-6 text-white"
+            >
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
+                    className="w-full max-w-lg rounded-xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-lg"
+                >
+                    {/* ✅ Title */}
+                    <motion.h1
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, ease: 'easeOut' }}
+                        className="mb-4 bg-gradient-to-r from-[#ff4ecb] to-[#ff7f50] bg-clip-text text-center text-3xl font-bold text-transparent"
+                    >
+                        Your Secret Message
+                    </motion.h1>
 
-                    <textarea
-                        className="h-40 w-full rounded-lg bg-gray-700 p-3 text-white focus:ring-2 focus:ring-orange-500"
+                    {/* ✅ Secret Message Box */}
+                    <motion.textarea
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5, ease: 'easeOut', delay: 0.4 }}
+                        className="h-40 w-full rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white focus:ring-2 focus:ring-[#ff4ecb]"
                         readOnly
                         value={message}
-                    ></textarea>
+                    ></motion.textarea>
 
+                    {/* ✅ Copy Button */}
                     <motion.button
                         onClick={handleCopy}
-                        className="mt-4 flex w-full items-center gap-2 rounded-lg bg-orange-500 px-6 py-3 text-white hover:bg-orange-600"
-                        whileHover={{ scale: 1.05 }}
+                        className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#ff4ecb] to-[#ff7f50] px-6 py-3 font-semibold text-white shadow-md transition hover:scale-105"
                         whileTap={{ scale: 0.97 }}
                     >
                         <Clipboard size={20} />
                         {copied ? 'Copied!' : 'Copy Message'}
                     </motion.button>
 
-                    <p className="mt-3 text-center text-sm text-gray-400">This message has been deleted after viewing.</p>
-                </div>
-            </div>
+                    {/* ✅ Message Expiry Notice */}
+                    <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, ease: 'easeOut', delay: 0.6 }}
+                        className="mt-3 text-center text-sm text-gray-300"
+                    >
+                        ⚠️ This message has been **deleted** after viewing.
+                    </motion.p>
+                </motion.div>
+            </motion.div>
         </>
     );
 }
