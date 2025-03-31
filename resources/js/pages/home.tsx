@@ -8,7 +8,7 @@ export default function Home() {
         <>
             <Head title="Secure Messaging" />
             <Navbar />
-            <div className="relative flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-purple-900 to-black px-6 text-white">
+            <div className="relative flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-[#090214] via-[#1b0c3b] to-[#2e104f] text-white">
                 {/* ✅ Hero Section (Responsive) */}
                 <div className="mt-24 max-w-4xl px-4 text-center sm:px-8">
                     <motion.h1

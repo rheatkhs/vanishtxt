@@ -43,7 +43,7 @@ export default function CreateMessage({ generatedLink }: CreateMessageProps) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1.2, ease: 'easeInOut' }}
-                className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-[#0a0218] to-[#1b0c3b] px-6 text-white"
+                className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-[#090214] via-[#1b0c3b] to-[#2e104f] px-6 text-white"
             >
                 {/* ✅ Page Title */}
                 <motion.h1
