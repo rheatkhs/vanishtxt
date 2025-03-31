@@ -1,60 +1,14 @@
+import Navbar from '@/pages/components/Navbar';
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { ArrowRight } from 'lucide-react';
 
 export default function Home() {
-    const [menuOpen, setMenuOpen] = useState(false);
-
     return (
         <>
             <Head title="Secure Messaging" />
+            <Navbar />
             <div className="relative flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-purple-900 to-black px-6 text-white">
-                {/* ✅ Navigation Bar (Mobile Responsive) */}
-                <motion.nav
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="fixed top-0 left-0 w-full bg-purple-950 shadow-md"
-                >
-                    <div className="flex items-center justify-between px-6 py-4 md:px-10">
-                        <div className="text-2xl font-extrabold tracking-wide text-white">VanishTXT</div>
-
-                        {/* ✅ Mobile Menu Toggle */}
-                        <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
-                            {menuOpen ? <X size={28} /> : <Menu size={28} />}
-                        </button>
-
-                        {/* ✅ Desktop Menu */}
-                        <div className="hidden gap-6 text-sm text-gray-300 md:flex">
-                            <Link href="/about" className="transition hover:text-pink-400">
-                                About
-                            </Link>
-                            <Link href="/support" className="transition hover:text-pink-400">
-                                Support
-                            </Link>
-                            <Link href="/signin" className="transition hover:text-pink-400">
-                                Sign In
-                            </Link>
-                        </div>
-                    </div>
-
-                    {/* ✅ Mobile Menu Dropdown */}
-                    {menuOpen && (
-                        <div className="flex flex-col items-center gap-4 bg-purple-950 py-4 md:hidden">
-                            <Link href="/about" className="text-white transition hover:text-pink-400">
-                                About
-                            </Link>
-                            <Link href="/support" className="text-white transition hover:text-pink-400">
-                                Support
-                            </Link>
-                            <Link href="/signin" className="text-white transition hover:text-pink-400">
-                                Sign In
-                            </Link>
-                        </div>
-                    )}
-                </motion.nav>
-
                 {/* ✅ Hero Section (Responsive) */}
                 <div className="mt-24 max-w-4xl px-4 text-center sm:px-8">
                     <motion.h1

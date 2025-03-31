@@ -1,10 +1,11 @@
+import Navbar from '@/pages/components/Navbar';
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-
 export default function About() {
     return (
         <>
-            <Head title="About VanishTXT" />
+            <Head title="About" />
+            <Navbar />
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
