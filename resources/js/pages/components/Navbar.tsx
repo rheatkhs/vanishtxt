@@ -1,102 +1,93 @@
-import { Link } from '@inertiajs/react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { Link, usePage } from '@inertiajs/react'; // ✅ Import usePage to detect current route
+import { motion } from 'framer-motion';
+import { Headphones, Home, Info, LogIn } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function Navbar() {
-    const [menuOpen, setMenuOpen] = useState(false);
+    const { url } = usePage(); // ✅ Get current route from Inertia
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkScreenSize = () => setIsMobile(window.innerWidth < 768);
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
 
     return (
-        <motion.nav
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="fixed top-0 left-0 z-50 w-full bg-white/10 shadow-lg backdrop-blur-md"
-        >
-            <div className="flex items-center justify-between px-6 py-4 md:px-10">
-                {/* ✅ Logo */}
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, ease: 'easeOut' }}
-                    className="text-2xl font-extrabold tracking-wide text-white"
+        <>
+            {/* ✅ Top Navbar (Hidden on Mobile) */}
+            {!isMobile && (
+                <motion.nav
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                    className="fixed top-0 left-0 z-50 w-full bg-white/10 shadow-lg backdrop-blur-md"
                 >
-                    VanishTXT
-                </motion.div>
-
-                {/* ✅ Desktop Menu */}
-                <div className="hidden gap-6 text-sm text-gray-300 md:flex">
-                    <NavItem href="/" text="Home" />
-                    <NavItem href="/about" text="About" />
-                    <NavItem href="/support" text="Support" />
-                    <NavItem href="/signin" text="Sign In" />
-                </div>
-
-                {/* ✅ Mobile Menu Toggle (Animated) */}
-                <motion.button
-                    whileTap={{ scale: 0.8, rotate: 180 }}
-                    className="text-white transition md:hidden"
-                    onClick={() => setMenuOpen(!menuOpen)}
-                >
-                    {menuOpen ? <X size={32} className="text-pink-400" /> : <Menu size={32} />}
-                </motion.button>
-            </div>
-
-            {/* ✅ Full-Screen Mobile Menu (Centered) */}
-            <AnimatePresence>
-                {menuOpen && (
-                    <motion.div
-                        initial={{ x: '100%' }}
-                        animate={{ x: 0 }}
-                        exit={{ x: '100%' }}
-                        transition={{ duration: 0.5, ease: 'easeOut' }}
-                        className="fixed inset-0 z-40 flex h-screen flex-col items-center justify-center bg-gradient-to-br from-[#1b0c3b] to-[#2e104f] text-white"
-                    >
-                        {/* ✅ Close Button */}
-                        <motion.button
-                            whileHover={{ scale: 1.2 }}
-                            whileTap={{ scale: 0.9 }}
-                            className="absolute top-6 right-6 text-pink-400"
-                            onClick={() => setMenuOpen(false)}
+                    <div className="flex items-center justify-between px-6 py-4 md:px-10">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.6, ease: 'easeOut' }}
+                            className="text-2xl font-extrabold tracking-wide text-white"
                         >
-                            <X size={36} />
-                        </motion.button>
-
-                        {/* ✅ Full-Screen Nav Links (Centered Vertically) */}
-                        <div className="flex h-full w-full flex-col items-center justify-center">
-                            <NavItemFull href="/" text="Home" onClick={() => setMenuOpen(false)} />
-                            <NavItemFull href="/about" text="About" onClick={() => setMenuOpen(false)} />
-                            <NavItemFull href="/support" text="Support" onClick={() => setMenuOpen(false)} />
-                            <NavItemFull href="/signin" text="Sign In" onClick={() => setMenuOpen(false)} />
+                            VanishTXT
+                        </motion.div>
+                        <div className="hidden gap-6 text-sm text-gray-300 md:flex">
+                            <NavItem href="/" text="Home" active={url === '/'} />
+                            <NavItem href="/about" text="About" active={url === '/about'} />
+                            <NavItem href="/support" text="Support" active={url === '/support'} />
+                            <NavItem href="/signin" text="Sign In" active={url === '/signin'} />
                         </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </motion.nav>
+                    </div>
+                </motion.nav>
+            )}
+
+            {/* ✅ Bottom Navigation (Only on Mobile) */}
+            {isMobile && (
+                <motion.div
+                    initial={{ y: 100 }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                    className="fixed bottom-5 left-1/2 z-50 flex w-[90%] max-w-[400px] -translate-x-1/2 items-center justify-around rounded-full bg-white/10 p-3 shadow-lg backdrop-blur-md"
+                >
+                    <NavItemMobile href="/" text="Home" icon={<Home />} active={url === '/'} />
+                    <NavItemMobile href="/about" text="About" icon={<Info />} active={url === '/about'} />
+                    <NavItemMobile href="/support" text="Support" icon={<Headphones />} active={url === '/support'} />
+                    <NavItemMobile href="/signin" text="Sign In" icon={<LogIn />} active={url === '/signin'} />
+                </motion.div>
+            )}
+        </>
     );
 }
 
-/* ✅ Full-Screen Mobile Menu Item (Centered) */
-function NavItemFull({ href, text, onClick }: { href: string; text: string; onClick?: () => void }) {
+/* ✅ Desktop Navigation Items */
+function NavItem({ href, text, active }: { href: string; text: string; active: boolean }) {
     return (
         <motion.div
-            whileHover={{ backgroundColor: 'rgba(255, 78, 203, 0.2)' }}
+            whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
-            className="w-full cursor-pointer border-b border-white/10 py-8 text-center text-2xl font-semibold transition hover:bg-white/20"
-            onClick={onClick}
+            className={`cursor-pointer transition ${active ? 'text-pink-400' : 'text-white'}`}
         >
-            <Link href={href} className="block w-full">
-                {text}
-            </Link>
+            <Link href={href}>{text}</Link>
         </motion.div>
     );
 }
 
-/* ✅ Desktop Nav Item */
-function NavItem({ href, text }: { href: string; text: string }) {
+/* ✅ Mobile Navigation Items (Active Matches Link) */
+function NavItemMobile({ href, text, icon, active }: { href: string; text: string; icon: JSX.Element; active: boolean }) {
     return (
-        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} className="cursor-pointer text-white transition hover:text-pink-400">
-            <Link href={href}>{text}</Link>
+        <motion.div
+            whileTap={{ scale: 0.9 }}
+            className={`relative flex flex-col items-center justify-center px-4 py-2 transition ${active ? 'text-pink-400' : 'text-gray-300'}`}
+        >
+            <Link href={href} className="flex flex-col items-center">
+                <motion.div animate={{ scale: active ? 1.2 : 1 }} className={`text-2xl transition ${active ? 'text-pink-400' : 'text-gray-300'}`}>
+                    {icon}
+                </motion.div>
+                <span className="text-xs">{text}</span>
+            </Link>
+            {active && <motion.div layoutId="active-underline" className="absolute -bottom-1 h-1 w-5 rounded-full bg-pink-400" />}
         </motion.div>
     );
 }
