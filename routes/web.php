@@ -7,6 +7,9 @@ use App\Http\Controllers\MessageController;
 Route::get('/', function () {
     return Inertia::render('home');
 })->name('home');
+Route::get('/about', function () {
+    return Inertia::render('About');
+})->name('About');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
