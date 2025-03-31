@@ -50,29 +50,6 @@ export default function Home() {
                         </Link>
                     </motion.div>
                 </div>
-
-                {/* ✅ 3D Animation Placeholder (Make Sure Image Scales Well)
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.5, duration: 0.8 }}
-                    className="mt-12 flex w-full justify-center"
-                >
-                    <img src="/images/secure-message.svg" alt="Secure Messaging" className="w-72 animate-pulse sm:w-96" />
-                </motion.div> */}
-
-                {/* ✅ Footer (Fixed on Mobile) */}
-                <motion.footer
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8, duration: 0.7 }}
-                    className="absolute bottom-4 px-4 text-center text-sm text-gray-400"
-                >
-                    Made with 🚀 by{' '}
-                    <a href="https://github.com/rheatkhs" className="text-pink-400 underline">
-                        Rhea Takahashi
-                    </a>
-                </motion.footer>
             </div>
         </>
     );

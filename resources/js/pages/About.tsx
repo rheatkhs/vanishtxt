@@ -14,7 +14,7 @@ export default function About() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1.2, ease: 'easeInOut' }}
-                className="relative flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-[#090214] via-[#1b0c3b] to-[#2e104f] px-6 pt-24 pb-20 text-white sm:pt-28 sm:pb-24 md:pt-32 md:pb-32 lg:pt-40 lg:pb-40"
+                className="relative flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-[#090214] via-[#1b0c3b] to-[#2e104f] px-6 pt-24 pb-32 sm:pt-28 sm:pb-40 md:pt-32 md:pb-32 lg:pt-40 lg:pb-40"
             >
                 {/* ✅ Title Section */}
                 <motion.h1
