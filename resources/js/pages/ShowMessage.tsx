@@ -5,9 +5,11 @@ import { useEffect, useState } from 'react';
 
 interface ShowMessageProps {
     message: string;
+    sender: string;
+    receiver: string;
 }
 
-export default function ShowMessage({ message }: ShowMessageProps) {
+export default function ShowMessage({ message, sender, receiver }: ShowMessageProps) {
     const [copied, setCopied] = useState(false);
 
     useEffect(() => {
@@ -44,7 +46,20 @@ export default function ShowMessage({ message }: ShowMessageProps) {
                     >
                         Your Secret Message
                     </motion.h1>
-
+                    {/* ✅ Sender & Receiver Info */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, ease: 'easeOut', delay: 0.4 }}
+                        className="mb-4 text-center text-sm text-gray-300"
+                    >
+                        <p>
+                            <span className="font-semibold text-[#ff4ecb]">From:</span> {sender || 'Anonymous'}
+                        </p>
+                        <p>
+                            <span className="font-semibold text-[#ff7f50]">To:</span> {receiver || 'Anonymous'}
+                        </p>
+                    </motion.div>
                     {/* ✅ Secret Message Box */}
                     <motion.textarea
                         initial={{ opacity: 0, scale: 0.95 }}
