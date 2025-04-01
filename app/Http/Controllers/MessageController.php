@@ -19,6 +19,8 @@ class MessageController extends Controller
     {
         $request->validate([
             'message' => 'required|string',
+            'sender' => 'nullable|string',
+            'receiver' => 'nullable|string',
         ]);
 
         // Encrypt the message
@@ -31,6 +33,8 @@ class MessageController extends Controller
         $message = Message::create([
             'encrypted_message' => $encryptedMessage,
             'access_token' => $accessToken,
+            'sender' => $request->sender ?? 'Anonymous',
+            'receiver' => $request->receiver ?? 'Anonymous',
         ]);
 
         // Return the page with the generated link using Inertia

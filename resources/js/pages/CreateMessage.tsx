@@ -8,7 +8,11 @@ interface CreateMessageProps {
 }
 
 export default function CreateMessage({ generatedLink }: CreateMessageProps) {
-    const { data, setData, post, processing, reset } = useForm({ message: '' });
+    const { data, setData, post, processing, reset } = useForm({
+        message: '',
+        sender: '',
+        receiver: '',
+    });
     const [copied, setCopied] = useState(false);
     const [resetting, setResetting] = useState(false);
     const [showLink, setShowLink] = useState(false);
@@ -16,7 +20,7 @@ export default function CreateMessage({ generatedLink }: CreateMessageProps) {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (!data.message.trim()) return;
-        post('/store');
+        post('/store', { data });
     };
 
     const handleCopy = () => {
@@ -63,6 +67,28 @@ export default function CreateMessage({ generatedLink }: CreateMessageProps) {
                     className="mt-8 w-full max-w-lg rounded-xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-lg"
                 >
                     <form onSubmit={handleSubmit} className="space-y-4">
+                        {/* ✅ Sender Input */}
+                        <motion.input
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.5, ease: 'easeOut', delay: 0.4 }}
+                            className="w-full rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#ff4ecb]"
+                            placeholder="Your Name (optional)"
+                            value={data.sender}
+                            onChange={(e) => setData('sender', e.target.value || 'Anonymous')}
+                        />
+
+                        {/* ✅ Receiver Input */}
+                        <motion.input
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.5, ease: 'easeOut', delay: 0.4 }}
+                            className="w-full rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#ff4ecb]"
+                            placeholder="Receiver's Name (optional)"
+                            value={data.receiver}
+                            onChange={(e) => setData('receiver', e.target.value || 'Anonymous')}
+                        />
+
                         {/* ✅ Message Input */}
                         <motion.textarea
                             initial={{ opacity: 0, scale: 0.95 }}
