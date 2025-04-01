@@ -10,6 +10,9 @@ Route::get('/', function () {
 Route::get('/about', function () {
     return Inertia::render('About');
 })->name('About');
+Route::get('/support', function () {
+    return Inertia::render('Support');
+})->name('Support');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
