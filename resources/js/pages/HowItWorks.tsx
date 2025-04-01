@@ -16,19 +16,19 @@ export default function HowItWorks() {
         },
         {
             number: 2,
-            icon: <Lock size={40} className="text-blue-400" />,
+            icon: <Lock size={40} className="text-pink-400" />,
             title: 'Encrypt & Generate a Secure Link',
             description: 'Your message is locked with end-to-end encryption.',
         },
         {
             number: 3,
-            icon: <Send size={40} className="text-green-400" />,
+            icon: <Send size={40} className="text-pink-400" />,
             title: 'Share the Secure Link',
             description: 'Send the link to your recipient. No accounts needed!',
         },
         {
             number: 4,
-            icon: <Trash2 size={40} className="text-red-400" />,
+            icon: <Trash2 size={40} className="text-pink-400" />,
             title: 'Message Self-Destructs',
             description: 'Once read, it vanishes forever. No logs, no traces.',
         },
@@ -65,8 +65,8 @@ export default function HowItWorks() {
 
                 {/* Quick Delivery Note */}
                 <div className="mb-16 flex items-center">
-                    <div className="mr-2 h-3 w-3 animate-pulse rounded-full bg-green-400"></div>
-                    <p className="text-green-400">Messages self-destruct after reading</p>
+                    <div className="mr-2 h-3 w-3 animate-pulse rounded-full bg-white"></div>
+                    <p className="text-white">Messages self-destruct after reading</p>
                 </div>
 
                 {/* Timeline Bar with Hover Effect */}
@@ -87,15 +87,7 @@ export default function HowItWorks() {
                                     initial={{ scale: 1 }}
                                     animate={{ scale: hoveredStep === step.number ? 1.4 : 1 }}
                                     transition={{ type: 'spring', stiffness: 300 }}
-                                    className={`z-10 flex h-10 w-10 items-center justify-center rounded-full text-lg font-bold text-white shadow-lg transition-all ${
-                                        step.number === 1
-                                            ? 'bg-pink-400'
-                                            : step.number === 2
-                                              ? 'bg-blue-400'
-                                              : step.number === 3
-                                                ? 'bg-green-400'
-                                                : 'bg-red-400'
-                                    }`}
+                                    className="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-pink-400 text-lg font-bold text-white shadow-lg transition-all"
                                 >
                                     {step.number}
                                 </motion.div>
@@ -113,19 +105,12 @@ export default function HowItWorks() {
                             animate={{ opacity: 1, y: 0 }}
                             whileHover={{
                                 scale: 1.08,
-                                boxShadow: `0px 0px 15px ${
-                                    step.number === 1 ? '#ff4ecb' : step.number === 2 ? '#4a90e2' : step.number === 3 ? '#28a745' : '#ff3b3b'
-                                }`,
                             }}
                             transition={{ duration: 0.3, ease: 'easeOut' }}
                             className="flex flex-col items-center rounded-lg bg-white/10 p-6 text-center shadow-lg transition-all"
                         >
                             {/* Step Icon */}
-                            <div
-                                className={`mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white/10 p-3 transition-all duration-300 ${
-                                    hoveredStep === step.number ? 'scale-110 shadow-lg' : ''
-                                }`}
-                            >
+                            <div className="mb-4 flex h-16 w-16 scale-110 items-center justify-center rounded-full bg-white/10 p-3 transition-all duration-300">
                                 {step.icon}
                             </div>
 

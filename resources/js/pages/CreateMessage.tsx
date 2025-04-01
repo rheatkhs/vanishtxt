@@ -75,7 +75,7 @@ export default function CreateMessage({ generatedLink }: CreateMessageProps) {
                             className="w-full rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#ff4ecb]"
                             placeholder="Your Name (optional)"
                             value={data.sender}
-                            onChange={(e) => setData('sender', e.target.value || 'Anonymous')}
+                            onChange={(e) => setData('sender', e.target.value)}
                         />
 
                         {/* ✅ Receiver Input */}
@@ -86,7 +86,7 @@ export default function CreateMessage({ generatedLink }: CreateMessageProps) {
                             className="w-full rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#ff4ecb]"
                             placeholder="Receiver's Name (optional)"
                             value={data.receiver}
-                            onChange={(e) => setData('receiver', e.target.value || 'Anonymous')}
+                            onChange={(e) => setData('receiver', e.target.value)}
                         />
 
                         {/* ✅ Message Input */}
