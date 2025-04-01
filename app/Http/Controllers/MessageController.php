@@ -24,8 +24,8 @@ class MessageController extends Controller
         // Encrypt the message
         $encryptedMessage = Crypt::encryptString($request->message);
 
-        // Generate unique access token
-        $accessToken = Str::random(32);
+        // Generate a UUID-like access token (36-character format)
+        $accessToken = Str::uuid()->toString();
 
         // Store the message
         $message = Message::create([
@@ -38,16 +38,23 @@ class MessageController extends Controller
             'generatedLink' => route('message.show', $accessToken),
         ]);
     }
-    public function show($token): Response
+    public function show(string $token): Response
     {
+        // Ensure the token is a valid UUID format
+        if (!Str::isUuid($token)) {
+            abort(404, 'Invalid token format.');
+        }
+
+        // Retrieve the message by token
         $message = Message::where('access_token', $token)->firstOrFail();
 
-        // Decrypt message
+        // Decrypt the message
         $decryptedMessage = Crypt::decryptString($message->encrypted_message);
 
-        // Delete after viewing
+        // Delete message after viewing (one-time access)
         $message->delete();
 
+        // Return the decrypted message using Inertia
         return Inertia::render('ShowMessage', [
             'message' => $decryptedMessage
         ]);
