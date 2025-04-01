@@ -10,6 +10,9 @@ Route::get('/', function () {
 Route::get('/about', function () {
     return Inertia::render('About');
 })->name('About');
+Route::get('/how-it-works', function () {
+    return Inertia::render('HowItWorks');
+})->name('HowItWorks');
 Route::get('/support', function () {
     return Inertia::render('Support');
 })->name('Support');
