@@ -30,7 +30,7 @@ This project is powered by a modern, high-performance stack for seamless functio
 
 🔹 **Full-Stack Framework:** Laravel 12 + Inertia.js  
 🔹 **Frontend:** React, TailwindCSS, Framer Motion  
-🔹 **Backend:** PostgreSQL
+🔹 **Backend:** PostgreSQL, PHP
 🔹 **Security:** Laravel Crypt, UUID-based tokens for secure message handling  
 
 ---
