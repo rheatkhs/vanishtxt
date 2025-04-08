@@ -72,34 +72,59 @@ class MessageController extends Controller
 
     public function show(string $token): Response
     {
-        // ✅ Ensure token is a valid UUID format
         if (!Str::isUuid($token)) {
             abort(404, 'Invalid token format.');
         }
 
-        // ✅ Retrieve the message by token
         $message = Message::where('access_token', $token)->first();
 
         if (!$message) {
             abort(404, 'Message not found or already viewed.');
         }
 
+        $userAgent = request()->header('User-Agent');
+
+        // List of common preview bot keywords
+        $knownBots = [
+            'Discordbot',
+            'Slackbot',
+            'Twitterbot',
+            'facebookexternalhit',
+            'WhatsApp',
+            'TelegramBot',
+            'LinkedInBot',
+            'Embedly',
+            'SkypeUriPreview',
+            'Googlebot',
+            'bingbot',
+            'AhrefsBot'
+        ];
+
+        // Check if the request is likely from a preview bot
+        foreach ($knownBots as $bot) {
+            if (stripos($userAgent, $bot) !== false) {
+                // Show preview but do NOT decrypt or delete
+                return Inertia::render('BotPreview', [
+                    'messagePreview' => 'This message is encrypted and will be shown when opened by the recipient.',
+                    'sender' => $message->sender ?? 'Anonymous',
+                    'receiver' => $message->receiver ?? 'Anonymous',
+                ]);
+            }
+        }
+
+        // ✅ If it's a real user, proceed with decryption and deletion
         try {
-            // ✅ Decrypt the message
             $decryptedMessage = Crypt::decryptString($message->encrypted_message);
         } catch (\Exception $e) {
             Log::error('Decryption failed: ' . $e->getMessage());
             abort(500, 'Failed to decrypt the message.');
         }
 
-        // ✅ Get sender & receiver (default to "Anonymous" if null)
         $sender = $message->sender ?? 'Anonymous';
         $receiver = $message->receiver ?? 'Anonymous';
 
-        // ✅ Delete message after viewing (one-time access)
-        $message->delete();
+        $message->delete(); // Delete after successful view by a human
 
-        // ✅ Return the decrypted message using Inertia
         return Inertia::render('ShowMessage', [
             'message' => $decryptedMessage,
             'sender' => $sender,
