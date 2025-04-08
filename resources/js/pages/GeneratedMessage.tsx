@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Clipboard, RefreshCcw } from 'lucide-react';
+import { Clipboard, RefreshCcw, Share2 } from 'lucide-react';
 import { useState } from 'react';
 
 interface GeneratedMessageProps {
@@ -12,6 +12,7 @@ interface GeneratedMessageProps {
 export default function GeneratedMessage({ generatedLink, sender = 'Anonymous', receiver = 'Anonymous' }: GeneratedMessageProps) {
     const [copied, setCopied] = useState(false);
     const [resetting, setResetting] = useState(false);
+    const [shareError, setShareError] = useState('');
 
     const handleCopy = () => {
         navigator.clipboard.writeText(generatedLink);
@@ -24,6 +25,23 @@ export default function GeneratedMessage({ generatedLink, sender = 'Anonymous', 
         setTimeout(() => {
             router.visit('/create');
         }, 500);
+    };
+
+    const handleShare = async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Secret Message via VanishTXT',
+                    text: `You've received a secret message from ${sender} 🎁`,
+                    url: generatedLink,
+                });
+                setShareError('');
+            } catch (err) {
+                setShareError('Sharing was cancelled.');
+            }
+        } else {
+            setShareError('Sharing is not supported on this device.');
+        }
     };
 
     return (
@@ -47,10 +65,9 @@ export default function GeneratedMessage({ generatedLink, sender = 'Anonymous', 
                         transition={{ duration: 0.6, ease: 'easeOut' }}
                         className="mb-6 bg-gradient-to-r from-[#ff4ecb] to-[#ff7f50] bg-clip-text text-center text-4xl font-bold text-transparent"
                     >
-                        🔐 Secret Message Created!
+                        Secret Message Created!
                     </motion.h1>
 
-                    {/* Stylish sender and receiver box */}
                     <div className="mb-6 rounded-md border border-[#ff4ecb] bg-black/20 px-4 py-3 text-center text-sm text-gray-300 shadow-inner">
                         <span className="block">
                             <span className="font-medium text-[#ff4ecb]">{sender}</span> ➡️{' '}
@@ -68,7 +85,9 @@ export default function GeneratedMessage({ generatedLink, sender = 'Anonymous', 
                         />
                     </div>
 
-                    <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+                    {shareError && <p className="mt-2 text-center text-sm text-red-400">{shareError}</p>}
+
+                    <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
                         <motion.button
                             onClick={handleCopy}
                             className="flex items-center gap-2 rounded-lg bg-[#ff4ecb] px-6 py-2 font-semibold text-white shadow-md transition hover:scale-105"
@@ -76,6 +95,15 @@ export default function GeneratedMessage({ generatedLink, sender = 'Anonymous', 
                         >
                             <Clipboard size={20} />
                             {copied ? 'Copied!' : 'Copy Link'}
+                        </motion.button>
+
+                        <motion.button
+                            onClick={handleShare}
+                            className="flex items-center gap-2 rounded-lg border border-[#ff4ecb] px-6 py-2 font-semibold text-white transition-all hover:border-pink-400"
+                            whileTap={{ scale: 0.97 }}
+                        >
+                            <Share2 size={20} />
+                            <span>Share</span>
                         </motion.button>
 
                         <motion.button
