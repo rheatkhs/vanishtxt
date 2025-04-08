@@ -34,7 +34,12 @@ class MessageController extends Controller
         ]);
 
         if (!$captchaResponse->json('success')) {
-            return back()->withErrors(['captcha' => 'CAPTCHA validation failed. Please try again.'])->withInput();
+            Log::warning('CAPTCHA failed', [
+                'ip' => $request->ip(),
+                'response' => $captchaResponse->json(),
+            ]);
+
+            return back()->withErrors(['cf-turnstile-response' => 'CAPTCHA validation failed. Please try again.'])->withInput();
         }
 
         // Encrypt the message
