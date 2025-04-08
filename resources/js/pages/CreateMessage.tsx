@@ -7,8 +7,10 @@ export default function CreateMessage() {
         message: '',
         sender: '',
         receiver: '',
-        'cf-turnstile-response': '',
+        cfTurnstileResponse: '', // ✅ use camelCase to avoid TS issues
     });
+
+    const captchaError = errors.cfTurnstileResponse;
 
     const [captchaReady, setCaptchaReady] = useState(false);
 
@@ -32,7 +34,7 @@ export default function CreateMessage() {
             return;
         }
 
-        setData('cf-turnstile-response', token);
+        setData('cfTurnstileResponse', token); // ✅ set the token
         post('/store');
     };
 
@@ -83,9 +85,9 @@ export default function CreateMessage() {
                             onChange={(e) => setData('message', e.target.value)}
                         />
 
-                        {/* CAPTCHA widget */}
+                        {/* Cloudflare CAPTCHA */}
                         <div className="cf-turnstile" data-sitekey="0x4AAAAAABGKQB-Q7Xko_nNM" data-theme="dark"></div>
-                        {errors['cf-turnstile-response'] && <p className="text-sm text-red-400">{errors['cf-turnstile-response']}</p>}
+                        {captchaError && <p className="text-sm text-red-400">{captchaError}</p>}
 
                         <motion.button
                             type="submit"
