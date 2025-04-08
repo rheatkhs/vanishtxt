@@ -6,6 +6,7 @@ use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -22,7 +23,19 @@ class MessageController extends Controller
             'message' => 'required|string',
             'sender' => 'nullable|string',
             'receiver' => 'nullable|string',
+            'cf-turnstile-response' => 'required|string',
         ]);
+
+        // Verify CAPTCHA with Cloudflare
+        $captchaResponse = Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+            'secret' => env('TURNSTILE_SECRET'), // Set this in .env
+            'response' => $request->cf_turnstile_response,
+            'remoteip' => $request->ip(),
+        ]);
+
+        if (!$captchaResponse->json('success')) {
+            return back()->withErrors(['captcha' => 'CAPTCHA validation failed. Please try again.'])->withInput();
+        }
 
         // Encrypt the message
         $encryptedMessage = Crypt::encryptString($request->message);

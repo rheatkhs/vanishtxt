@@ -87,7 +87,7 @@ export default function GeneratedMessage({ generatedLink, sender = 'Anonymous', 
 
                     {shareError && <p className="mt-2 text-center text-sm text-red-400">{shareError}</p>}
 
-                    <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
+                    <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
                         <motion.button
                             onClick={handleCopy}
                             className="flex items-center gap-2 rounded-lg bg-[#ff4ecb] px-6 py-2 font-semibold text-white shadow-md transition hover:scale-105"

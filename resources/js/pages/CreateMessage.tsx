@@ -1,18 +1,35 @@
 import { Head, useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
 
 export default function CreateMessage() {
     const { data, setData, post, processing } = useForm({
         message: '',
         sender: '',
         receiver: '',
+        'cf-turnstile-response': '',
     });
+
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+        script.async = true;
+        document.body.appendChild(script);
+    }, []);
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (!data.message.trim()) return;
-        post('/store', { data });
+
+        const captchaToken = (document.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement)?.value;
+
+        if (!captchaToken) {
+            alert('Please complete the CAPTCHA.');
+            return;
+        }
+
+        setData('cf-turnstile-response', captchaToken);
+        post('/store');
     };
 
     return (
@@ -75,6 +92,9 @@ export default function CreateMessage() {
                             value={data.message}
                             onChange={(e) => setData('message', e.target.value)}
                         ></motion.textarea>
+
+                        {/* ✅ Cloudflare Turnstile Widget */}
+                        <div className="cf-turnstile" data-sitekey="0x4AAAAAABGKQB-Q7Xko_nNM" data-theme="dark"></div>
 
                         {/* ✅ Submit Button */}
                         <motion.button
