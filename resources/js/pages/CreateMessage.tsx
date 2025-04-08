@@ -84,8 +84,10 @@ export default function CreateMessage() {
                         />
 
                         {/* Cloudflare CAPTCHA */}
-                        <div className="cf-turnstile" data-sitekey="0x4AAAAAABGKQB-Q7Xko_nNM" data-theme="dark"></div>
-                        {errors['cf-turnstile-response'] && <p className="text-sm text-red-400">{errors['cf-turnstile-response']}</p>}
+                        <div className="flex w-full justify-center">
+                            <div className="cf-turnstile" data-sitekey="0x4AAAAAABGKQB-Q7Xko_nNM" data-theme="dark"></div>
+                            {errors['cf-turnstile-response'] && <p className="text-sm text-red-400">{errors['cf-turnstile-response']}</p>}
+                        </div>
 
                         <motion.button
                             type="submit"
