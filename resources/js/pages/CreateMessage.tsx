@@ -36,6 +36,13 @@ export default function CreateMessage() {
         post('/store');
     };
 
+    useEffect(() => {
+        // For TypeScript
+        (window as any).onTurnstileSuccess = function (token: string) {
+            setData('cf-turnstile-response', token);
+        };
+    }, []);
+
     return (
         <>
             <Head title="Create Message" />
@@ -85,9 +92,14 @@ export default function CreateMessage() {
 
                         {/* Cloudflare CAPTCHA */}
                         <div className="flex w-full justify-center">
-                            <div className="cf-turnstile" data-sitekey="0x4AAAAAABGKQB-Q7Xko_nNM" data-theme="dark"></div>
-                            {errors['cf-turnstile-response'] && <p className="text-sm text-red-400">{errors['cf-turnstile-response']}</p>}
+                            <div
+                                className="cf-turnstile"
+                                data-sitekey="0x4AAAAAABGKQB-Q7Xko_nNM"
+                                data-theme="dark"
+                                data-callback="onTurnstileSuccess"
+                            ></div>
                         </div>
+                        {errors?.['cf-turnstile-response'] && <p className="text-sm text-red-400">{errors['cf-turnstile-response']}</p>}
 
                         <motion.button
                             type="submit"
