@@ -7,10 +7,8 @@ export default function CreateMessage() {
         message: '',
         sender: '',
         receiver: '',
-        cfTurnstileResponse: '', // ✅ use camelCase to avoid TS issues
+        'cf-turnstile-response': '', // 🔥 use this exact key here (with dashes)
     });
-
-    const captchaError = errors.cfTurnstileResponse;
 
     const [captchaReady, setCaptchaReady] = useState(false);
 
@@ -34,7 +32,7 @@ export default function CreateMessage() {
             return;
         }
 
-        setData('cfTurnstileResponse', token); // ✅ set the token
+        setData('cf-turnstile-response', token); // ✅ must match exactly
         post('/store');
     };
 
@@ -87,7 +85,7 @@ export default function CreateMessage() {
 
                         {/* Cloudflare CAPTCHA */}
                         <div className="cf-turnstile" data-sitekey="0x4AAAAAABGKQB-Q7Xko_nNM" data-theme="dark"></div>
-                        {captchaError && <p className="text-sm text-red-400">{captchaError}</p>}
+                        {errors['cf-turnstile-response'] && <p className="text-sm text-red-400">{errors['cf-turnstile-response']}</p>}
 
                         <motion.button
                             type="submit"

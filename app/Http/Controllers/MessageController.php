@@ -23,13 +23,13 @@ class MessageController extends Controller
             'message' => 'required|string',
             'sender' => 'nullable|string',
             'receiver' => 'nullable|string',
-            'cfTurnstileResponse' => 'required|string',
+            'cf-turnstile-response' => 'required|string',
         ]);
 
         // Verify CAPTCHA with Cloudflare
         $captchaResponse = Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
-            'secret' => env('TURNSTILE_SECRET'), // Set this in .env
-            'response' => $request->cfTurnstileResponse,
+            'secret' => env('TURNSTILE_SECRET'),
+            'response' => $request->input('cf-turnstile-response'), // ✅ use input() for safety
             'remoteip' => $request->ip(),
         ]);
 
