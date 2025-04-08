@@ -50,7 +50,7 @@ export default function CreateMessage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1.2, ease: 'easeInOut' }}
-                className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-[#090214] via-[#1b0c3b] to-[#2e104f] px-6 text-white"
+                className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-[#090214] via-[#1b0c3b] to-[#2e104f] px-6 pb-32 text-white"
             >
                 <motion.h1
                     initial={{ opacity: 0, y: -20 }}

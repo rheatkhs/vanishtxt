@@ -30,3 +30,5 @@ Route::get('/create', [MessageController::class, 'create'])->name('message.creat
 Route::post('/store', [MessageController::class, 'store'])->name('message.store');
 Route::get('/message/generated/{token}', [MessageController::class, 'generated'])->name('message.generated');
 Route::get('/message/{token}', [MessageController::class, 'show'])->name('message.show');
+
+Route::fallback(fn() => Inertia::render('errors/404'))->name('fallback');
