@@ -28,4 +28,5 @@ require __DIR__ . '/auth.php';
 
 Route::get('/create', [MessageController::class, 'create'])->name('message.create');
 Route::post('/store', [MessageController::class, 'store'])->name('message.store');
+Route::get('/message/generated/{token}', [MessageController::class, 'generated'])->name('message.generated');
 Route::get('/message/{token}', [MessageController::class, 'show'])->name('message.show');

@@ -1,43 +1,18 @@
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Clipboard, Eye, RefreshCcw } from 'lucide-react';
-import { FormEvent, useState } from 'react';
+import { FormEvent } from 'react';
 
-interface CreateMessageProps {
-    generatedLink?: string;
-}
-
-export default function CreateMessage({ generatedLink }: CreateMessageProps) {
-    const { data, setData, post, processing, reset } = useForm({
+export default function CreateMessage() {
+    const { data, setData, post, processing } = useForm({
         message: '',
         sender: '',
         receiver: '',
     });
-    const [copied, setCopied] = useState(false);
-    const [resetting, setResetting] = useState(false);
-    const [showLink, setShowLink] = useState(false);
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (!data.message.trim()) return;
         post('/store', { data });
-    };
-
-    const handleCopy = () => {
-        if (generatedLink) {
-            navigator.clipboard.writeText(generatedLink);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        }
-    };
-
-    const handleReset = () => {
-        setResetting(true);
-        setTimeout(() => {
-            reset();
-            setResetting(false);
-            router.visit('/create');
-        }, 500);
     };
 
     return (
@@ -111,82 +86,6 @@ export default function CreateMessage({ generatedLink }: CreateMessageProps) {
                             {processing ? 'Encrypting...' : 'Create Message'}
                         </motion.button>
                     </form>
-
-                    {/* ✅ Secret Link Section */}
-                    {generatedLink && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.5 }}
-                            className="mt-6 rounded-xl border border-white/20 bg-white/10 p-6 text-center shadow-xl backdrop-blur-lg"
-                        >
-                            {/* ✅ Message Created Text */}
-                            <motion.h2
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.4, ease: 'easeOut' }}
-                                className="text-lg font-semibold text-[#ff4ecb]"
-                            >
-                                🎉 Your secret message has been created!
-                            </motion.h2>
-
-                            {/* ✅ Show Link Button with Animation */}
-                            {!showLink ? (
-                                <motion.button
-                                    onClick={() => setShowLink(true)}
-                                    className="mt-4 flex items-center justify-center gap-2 rounded-lg bg-[#ff4ecb] px-6 py-2 font-semibold text-white shadow-md transition hover:scale-105"
-                                    whileTap={{ scale: 0.97 }}
-                                >
-                                    <Eye size={20} />
-                                    Show Link
-                                </motion.button>
-                            ) : (
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.4, ease: 'easeOut' }}
-                                    className="mt-3 rounded-lg border border-[#ff4ecb] bg-black/30 p-3 text-white"
-                                >
-                                    <p className="text-sm text-gray-300">Here is your secure link:</p>
-                                    <textarea
-                                        readOnly
-                                        className="mt-2 w-full rounded-lg border border-[#ff4ecb] bg-transparent p-2 text-sm text-[#ff4ecb] focus:ring-2 focus:ring-[#ff4ecb]"
-                                        value={generatedLink}
-                                    />
-                                </motion.div>
-                            )}
-
-                            {/* ✅ Action Buttons (Only when "Show Link" is clicked) */}
-                            {showLink && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5, ease: 'easeOut' }}
-                                    className="mt-4 flex flex-col justify-center gap-3 sm:flex-row"
-                                >
-                                    {/* Copy Button */}
-                                    <motion.button
-                                        onClick={handleCopy}
-                                        className="flex items-center gap-2 rounded-lg bg-[#ff4ecb] px-6 py-2 font-semibold text-white shadow-md transition hover:scale-105"
-                                        whileTap={{ scale: 0.97 }}
-                                    >
-                                        <Clipboard size={20} />
-                                        {copied ? 'Copied!' : 'Copy'}
-                                    </motion.button>
-
-                                    {/* Reset Button */}
-                                    <motion.button
-                                        onClick={handleReset}
-                                        className="flex items-center justify-center rounded-lg border border-gray-400 px-6 py-2 font-semibold text-white transition-all hover:border-pink-400"
-                                        whileTap={{ scale: 0.97 }}
-                                    >
-                                        <RefreshCcw size={20} className={resetting ? 'animate-spin' : ''} />
-                                        Reset
-                                    </motion.button>
-                                </motion.div>
-                            )}
-                        </motion.div>
-                    )}
                 </motion.div>
             </motion.div>
         </>

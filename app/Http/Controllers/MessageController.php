@@ -39,10 +39,19 @@ class MessageController extends Controller
         ]);
 
         // Return the page with the generated link using Inertia
-        return Inertia::render('CreateMessage', [
-            'generatedLink' => route('message.show', $accessToken),
+        return redirect()->route('message.generated', $accessToken);
+    }
+    public function generated(string $token): Response
+    {
+        $message = Message::where('access_token', $token)->firstOrFail();
+
+        return Inertia::render('GeneratedMessage', [
+            'generatedLink' => route('message.show', $message->access_token),
+            'sender' => $message->sender ?? 'Anonymous',
+            'receiver' => $message->receiver ?? 'Anonymous',
         ]);
     }
+
     public function show(string $token): Response
     {
         // ✅ Ensure token is a valid UUID format
