@@ -19,17 +19,15 @@ class MessageController extends Controller
     }
     public function store(Request $request)
     {
-        $expiresAt = $request->expires_at
-            ? now()->addMinutes(intval($request->expires_at))
-            : null;
-
         $request->validate([
             'message' => 'required|string',
             'sender' => 'nullable|string',
             'receiver' => 'nullable|string',
             'cf-turnstile-response' => 'required|string',
-            'expires_at' => $expiresAt,
+            'expires_at' => 'nullable|in:5,10,30,60,1440'
         ]);
+
+        $expiresAt = $request->expires_at ? now()->addMinutes((int) $request->expires_at) : null;
 
         // Verify CAPTCHA with Cloudflare
         $captchaResponse = Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
