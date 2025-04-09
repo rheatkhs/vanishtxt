@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { RefreshCcw } from 'lucide-react';
+import { Hourglass, RefreshCcw } from 'lucide-react';
 import { FormEvent, useEffect, useState } from 'react';
 
 export default function CreateMessage() {
@@ -93,7 +93,10 @@ export default function CreateMessage() {
                         />
 
                         <div className="space-y-4">
-                            <label className="block text-sm font-semibold text-white">⏳ Message Expiry</label>
+                            <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
+                                <Hourglass size={16} className="text-white" />
+                                Message Expiry
+                            </label>
 
                             <div className="flex flex-wrap gap-3">
                                 {[
@@ -102,6 +105,7 @@ export default function CreateMessage() {
                                     { label: '30 min', value: '30' },
                                     { label: '1 hour', value: '60' },
                                     { label: '1 day', value: '1440' },
+                                    { label: 'One-Time Access', value: 'once' },
                                 ].map(({ label, value }) => {
                                     const isActive = data.expires_at === value;
 

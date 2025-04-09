@@ -24,10 +24,14 @@ class MessageController extends Controller
             'sender' => 'nullable|string',
             'receiver' => 'nullable|string',
             'cf-turnstile-response' => 'required|string',
-            'expires_at' => 'nullable|in:5,10,30,60,1440'
+            'expires_at' => 'nullable|in:5,10,30,60,1440,once'
         ]);
 
-        $expiresAt = $request->expires_at ? now()->addMinutes((int) $request->expires_at) : null;
+        $expiresAt = null;
+
+        if ($request->expires_at && $request->expires_at !== 'once') {
+            $expiresAt = now()->addMinutes((int) $request->expires_at);
+        }
 
         // Verify CAPTCHA with Cloudflare
         $captchaResponse = Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
