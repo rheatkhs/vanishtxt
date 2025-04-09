@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+use Carbon\Carbon;
 
 class MessageController extends Controller
 {
@@ -81,18 +82,18 @@ class MessageController extends Controller
     public function show(string $token): Response
     {
         if (!Str::isUuid($token)) {
-            abort(404, 'Invalid token format.');
+            return Inertia::render('errors/Message404');
         }
 
         $message = Message::where('access_token', $token)->first();
 
         if (!$message) {
-            abort(404, 'Message not found or already viewed.');
+            return Inertia::render('errors/Message404');
         }
 
-        if ($message->expires_at && $message->expires_at->isPast()) {
-            $message->delete(); // optional: auto-delete expired message
-            abort(410, 'This message has expired.');
+        if ($message->expires_at && Carbon::parse($message->expires_at)->isPast()) {
+            // $message->delete(); // Optional: cleanup
+            return Inertia::render('errors/Message404');
         }
 
         $userAgent = request()->header('User-Agent');
