@@ -1,5 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
+import { RefreshCcw } from 'lucide-react';
 import { FormEvent, useEffect, useState } from 'react';
 
 export default function CreateMessage() {
@@ -70,52 +71,57 @@ export default function CreateMessage() {
                 >
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <motion.input
-                            className="w-full rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#ff4ecb]"
+                            className="w-full rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white placeholder-gray-400 transition duration-300 focus:border-white focus:outline-none"
                             placeholder="Your Name (optional)"
                             value={data.sender}
                             onChange={(e) => setData('sender', e.target.value)}
                         />
 
                         <motion.input
-                            className="w-full rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#ff4ecb]"
+                            className="w-full rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white placeholder-gray-400 transition duration-300 focus:border-white focus:outline-none"
                             placeholder="Receiver's Name (optional)"
                             value={data.receiver}
                             onChange={(e) => setData('receiver', e.target.value)}
                         />
 
                         <motion.textarea
-                            className="w-full rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#ff4ecb]"
+                            className="w-full resize-none overflow-hidden rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white placeholder-gray-400 transition duration-300 focus:border-white focus:outline-none"
                             placeholder="Type your secret message..."
                             rows={4}
                             value={data.message}
                             onChange={(e) => setData('message', e.target.value)}
                         />
 
-                        {/* ✅ Expiry Duration */}
-                        <div className="space-y-2">
-                            <label className="mb-1 block text-sm font-medium text-white">Message Expiry</label>
-                            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                        <div className="space-y-4">
+                            <label className="block text-sm font-semibold text-white">⏳ Message Expiry</label>
+
+                            <div className="flex flex-wrap gap-3">
                                 {[
-                                    { label: '5 minutes', value: '5' },
-                                    { label: '10 minutes', value: '10' },
-                                    { label: '30 minutes', value: '30' },
+                                    { label: '5 min', value: '5' },
+                                    { label: '10 min', value: '10' },
+                                    { label: '30 min', value: '30' },
                                     { label: '1 hour', value: '60' },
                                     { label: '1 day', value: '1440' },
-                                ].map(({ label, value }) => (
-                                    <button
-                                        type="button"
-                                        key={value}
-                                        className={`rounded-lg border px-4 py-2 text-sm font-medium transition ${
-                                            data.expires_at === value
-                                                ? 'border-pink-400 bg-pink-500 text-white'
-                                                : 'border-white/30 bg-transparent text-white hover:border-pink-400'
-                                        }`}
-                                        onClick={() => setData('expires_at', value)}
-                                    >
-                                        {label}
-                                    </button>
-                                ))}
+                                ].map(({ label, value }) => {
+                                    const isActive = data.expires_at === value;
+
+                                    return (
+                                        <button
+                                            type="button"
+                                            key={value}
+                                            onClick={() => setData('expires_at', value)}
+                                            className={`min-w-[100px] flex-1 rounded-full px-4 py-2 text-center text-sm font-medium transition-all duration-200 focus:outline-none ${
+                                                isActive
+                                                    ? 'bg-gradient-to-r from-[#ff4ecb] to-[#ff7f50] text-white shadow-md ring-2 ring-transparent'
+                                                    : 'bg-white/10 text-white hover:bg-white/20 hover:ring-1 hover:ring-transparent'
+                                            }`}
+                                        >
+                                            {label}
+                                        </button>
+                                    );
+                                })}
                             </div>
+
                             {errors.expires_at && <p className="text-sm text-red-400">{errors.expires_at}</p>}
                         </div>
 
@@ -133,10 +139,17 @@ export default function CreateMessage() {
                         <motion.button
                             type="submit"
                             disabled={processing || !data.message.trim()}
-                            className="w-full rounded-lg bg-gradient-to-r from-[#ff4ecb] to-[#ff7f50] px-8 py-3 font-semibold text-white shadow-lg transition-all hover:scale-105 disabled:opacity-50"
+                            className="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#ff4ecb] to-[#ff7f50] px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50"
                             whileTap={{ scale: 0.97 }}
                         >
-                            {processing ? 'Encrypting...' : 'Create Message'}
+                            {processing ? (
+                                <>
+                                    <RefreshCcw className="animate-spin" size={18} />
+                                    Encrypting...
+                                </>
+                            ) : (
+                                'Create Message'
+                            )}
                         </motion.button>
                     </form>
                 </motion.div>
