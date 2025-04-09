@@ -1,6 +1,7 @@
+import Tooltip from '@/pages/components/ToolTip';
 import { Head, useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Hourglass, RefreshCcw } from 'lucide-react';
+import { RefreshCcw } from 'lucide-react';
 import { FormEvent, useEffect, useState } from 'react';
 
 export default function CreateMessage() {
@@ -93,40 +94,71 @@ export default function CreateMessage() {
                         />
 
                         <div className="space-y-4">
-                            <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
+                            {/* <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
                                 <Hourglass size={16} className="text-white" />
                                 Message Expiry
-                            </label>
+                            </label> */}
 
                             <div className="flex flex-wrap gap-3">
                                 {[
-                                    { label: '5 min', value: '5' },
-                                    { label: '10 min', value: '10' },
-                                    { label: '30 min', value: '30' },
-                                    { label: '1 hour', value: '60' },
-                                    { label: '1 day', value: '1440' },
-                                    { label: 'One-Time Access', value: 'once' },
-                                ].map(({ label, value }) => {
+                                    { label: '5 min', value: '5', tooltip: 'Auto-expires after 5 minutes, even if unread' },
+                                    { label: '10 min', value: '10', tooltip: 'Auto-expires after 10 minutes, even if unread' },
+                                    { label: '30 min', value: '30', tooltip: 'Auto-expires after 30 minutes, even if unread' },
+                                    { label: '1 hour', value: '60', tooltip: 'Auto-expires after 1 hour, even if unread' },
+                                    { label: '1 day', value: '1440', tooltip: 'Auto-expires after 1 day, even if unread' },
+                                    { label: 'One-Time Access', value: 'once', tooltip: 'Stays active until opened once' },
+                                ].map(({ label, value, tooltip }) => {
                                     const isActive = data.expires_at === value;
 
                                     return (
-                                        <button
-                                            type="button"
-                                            key={value}
-                                            onClick={() => setData('expires_at', value)}
-                                            className={`min-w-[100px] flex-1 rounded-full px-4 py-2 text-center text-sm font-medium transition-all duration-200 focus:outline-none ${
-                                                isActive
-                                                    ? 'bg-gradient-to-r from-[#ff4ecb] to-[#ff7f50] text-white shadow-md ring-2 ring-transparent'
-                                                    : 'bg-white/10 text-white hover:bg-white/20 hover:ring-1 hover:ring-transparent'
-                                            }`}
-                                        >
-                                            {label}
-                                        </button>
+                                        <Tooltip key={value} content={tooltip}>
+                                            <button
+                                                type="button"
+                                                onClick={() => setData('expires_at', value)}
+                                                className={`min-w-[100px] flex-1 rounded-full px-4 py-2 text-center text-sm font-medium transition-all duration-200 focus:outline-none ${
+                                                    isActive
+                                                        ? 'bg-gradient-to-r from-[#ff4ecb] to-[#ff7f50] text-white shadow-md ring-2 ring-transparent'
+                                                        : 'bg-white/10 text-white hover:bg-white/20 hover:ring-1 hover:ring-transparent'
+                                                }`}
+                                            >
+                                                {label}
+                                            </button>
+                                        </Tooltip>
                                     );
                                 })}
                             </div>
 
                             {errors.expires_at && <p className="text-sm text-red-400">{errors.expires_at}</p>}
+
+                            <div className="mt-5 rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-white/10 p-5 text-sm text-gray-300 shadow-inner backdrop-blur-md">
+                                <h5 className="mb-2 flex items-center gap-2 text-base font-semibold text-white">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-5 w-5 text-pink-400"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M13 16h-1v-4h-1m1-4h.01M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z"
+                                        />
+                                    </svg>
+                                    Message Expiry Info
+                                </h5>
+                                <p className="leading-relaxed">
+                                    <span className="font-medium text-white">Timed messages</span> (e.g. 5 min, 1 hour) will
+                                    <span className="font-medium text-white"> automatically expire</span> after the selected duration —
+                                    <span className="font-medium text-white"> even if they are never opened</span>.
+                                </p>
+                                <p className="mt-2 leading-relaxed">
+                                    <span className="font-medium text-white">One-Time Access</span> messages will
+                                    <span className="font-medium text-white"> remain active indefinitely</span> and will only be deleted
+                                    <span className="font-medium text-white"> once they are viewed</span>.
+                                </p>
+                            </div>
                         </div>
 
                         {/* Cloudflare CAPTCHA */}
