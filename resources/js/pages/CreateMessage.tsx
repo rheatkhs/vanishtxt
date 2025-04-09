@@ -1,8 +1,8 @@
-import Tooltip from '@/pages/components/ToolTip';
 import { Head, useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { RefreshCcw } from 'lucide-react';
 import { FormEvent, useEffect, useState } from 'react';
+import Tooltip from './components/ToolTip';
 
 export default function CreateMessage() {
     const { data, setData, post, processing, errors } = useForm({
