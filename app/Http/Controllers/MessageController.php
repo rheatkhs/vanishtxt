@@ -19,15 +19,17 @@ class MessageController extends Controller
     }
     public function store(Request $request)
     {
+        $expiresAt = $request->expires_at
+            ? now()->addMinutes(intval($request->expires_at))
+            : null;
+
         $request->validate([
             'message' => 'required|string',
             'sender' => 'nullable|string',
             'receiver' => 'nullable|string',
             'cf-turnstile-response' => 'required|string',
-            'expires_at' => 'nullable|numeric',
+            'expires_at' => $expiresAt,
         ]);
-
-        $expiresAt = $request->expires_at ? now()->addMinutes(intval($request->expires_at)) : null;
 
         // Verify CAPTCHA with Cloudflare
         $captchaResponse = Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
@@ -86,7 +88,7 @@ class MessageController extends Controller
             abort(404, 'Message not found or already viewed.');
         }
 
-        if ($message->expires_at && now()->greaterThan($message->expires_at)) {
+        if ($message->expires_at && $message->expires_at->isPast()) {
             $message->delete(); // optional: auto-delete expired message
             abort(410, 'This message has expired.');
         }
