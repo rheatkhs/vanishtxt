@@ -7,6 +7,7 @@ export default function CreateMessage() {
         message: '',
         sender: '',
         receiver: '',
+        expires_at: '',
         'cf-turnstile-response': '', // 🔥 use this exact key here (with dashes)
     });
 
@@ -89,6 +90,34 @@ export default function CreateMessage() {
                             value={data.message}
                             onChange={(e) => setData('message', e.target.value)}
                         />
+
+                        {/* ✅ Expiry Duration */}
+                        <div className="space-y-2">
+                            <label className="mb-1 block text-sm font-medium text-white">Message Expiry</label>
+                            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                                {[
+                                    { label: '5 minutes', value: '5' },
+                                    { label: '10 minutes', value: '10' },
+                                    { label: '30 minutes', value: '30' },
+                                    { label: '1 hour', value: '60' },
+                                    { label: '1 day', value: '1440' },
+                                ].map(({ label, value }) => (
+                                    <button
+                                        type="button"
+                                        key={value}
+                                        className={`rounded-lg border px-4 py-2 text-sm font-medium transition ${
+                                            data.expires_at === value
+                                                ? 'border-pink-400 bg-pink-500 text-white'
+                                                : 'border-white/30 bg-transparent text-white hover:border-pink-400'
+                                        }`}
+                                        onClick={() => setData('expires_at', value)}
+                                    >
+                                        {label}
+                                    </button>
+                                ))}
+                            </div>
+                            {errors.expires_at && <p className="text-sm text-red-400">{errors.expires_at}</p>}
+                        </div>
 
                         {/* Cloudflare CAPTCHA */}
                         <div className="flex w-full justify-center">
