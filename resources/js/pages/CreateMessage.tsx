@@ -166,7 +166,7 @@ export default function CreateMessage() {
 
                         <motion.button
                             type="submit"
-                            disabled={processing || !data.message.trim()}
+                            disabled={processing || !data.message.trim() || !data.expires_at}
                             className="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#ff4ecb] to-[#ff7f50] px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50"
                             whileTap={{ scale: 0.97 }}
                         >

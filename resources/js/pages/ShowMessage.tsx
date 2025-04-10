@@ -65,7 +65,7 @@ export default function ShowMessage({ message, sender, receiver }: ShowMessagePr
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5, ease: 'easeOut', delay: 0.4 }}
-                        className="h-40 w-full rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white focus:ring-2 focus:ring-[#ff4ecb]"
+                        className="h-40 w-full resize-none overflow-hidden rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white transition duration-300 focus:border-white focus:outline-none"
                         readOnly
                         value={message}
                     ></motion.textarea>

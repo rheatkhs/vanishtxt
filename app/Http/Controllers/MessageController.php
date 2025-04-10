@@ -72,10 +72,20 @@ class MessageController extends Controller
     {
         $message = Message::where('access_token', $token)->firstOrFail();
 
+        $formattedExpiresAt = $message->expires_at
+            ? Carbon::parse($message->expires_at)->format('j F Y H:i')
+            : null;
+
+        $expiresMessage = $formattedExpiresAt
+            ? "This message will auto-expire at {$formattedExpiresAt}"
+            : "One-Time Access — Expires after being viewed once";
+
         return Inertia::render('GeneratedMessage', [
             'generatedLink' => route('message.show', $message->access_token),
             'sender' => $message->sender ?? 'Anonymous',
             'receiver' => $message->receiver ?? 'Anonymous',
+            'expires_at' => $formattedExpiresAt,
+            'expiresMessage' => $expiresMessage,
         ]);
     }
 

@@ -7,9 +7,11 @@ interface GeneratedMessageProps {
     generatedLink: string;
     sender?: string;
     receiver?: string;
+    expires_at?: string;
+    expiresMessage?: string;
 }
 
-export default function GeneratedMessage({ generatedLink, sender = 'Anonymous', receiver = 'Anonymous' }: GeneratedMessageProps) {
+export default function GeneratedMessage({ generatedLink, sender = 'Anonymous', receiver = 'Anonymous', expiresMessage }: GeneratedMessageProps) {
     const [copied, setCopied] = useState(false);
     const [resetting, setResetting] = useState(false);
     const [shareError, setShareError] = useState('');
@@ -73,14 +75,18 @@ export default function GeneratedMessage({ generatedLink, sender = 'Anonymous', 
                             <span className="font-medium text-[#ff4ecb]">{sender}</span> ➡️{' '}
                             <span className="font-medium text-[#ff7f50]">{receiver}</span>
                         </span>
-                        <span className="text-xs text-gray-400">Only the recipient can view this once 🔥</span>
+                        {expiresMessage && (
+                            <div className="mt-2 text-xs text-gray-400">
+                                <span className="italic">{expiresMessage}</span>
+                            </div>
+                        )}
                     </div>
 
                     <div className="rounded-lg border border-[#ff4ecb] bg-black/30 p-4">
                         <p className="mb-2 text-sm text-gray-300">Share this link to reveal the secret message:</p>
                         <textarea
                             readOnly
-                            className="w-full rounded-lg border border-[#ff4ecb] bg-transparent p-2 text-sm text-[#ff4ecb] focus:ring-2 focus:ring-[#ff4ecb]"
+                            className="w-full resize-none overflow-hidden rounded-lg border border-[#ff4ecb] bg-transparent p-2 text-sm text-[#ff4ecb] transition duration-300 focus:border-white focus:outline-none"
                             value={generatedLink}
                         />
                     </div>
