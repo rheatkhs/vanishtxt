@@ -79,16 +79,6 @@ export default function ShowMessage({ message, sender, receiver }: ShowMessagePr
                         <Clipboard size={20} />
                         {copied ? 'Copied!' : 'Copy Message'}
                     </motion.button>
-
-                    {/* ✅ Message Expiry Notice */}
-                    <motion.p
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, ease: 'easeOut', delay: 0.6 }}
-                        className="mt-3 text-center text-sm text-gray-300"
-                    >
-                        ⚠️ This message has been **deleted** after viewing.
-                    </motion.p>
                 </motion.div>
             </motion.div>
         </>

@@ -91,12 +91,13 @@ class MessageController extends Controller
             return Inertia::render('errors/Message404');
         }
 
+        // ✅ Handle expiration if expires_at is set
         if ($message->expires_at && Carbon::parse($message->expires_at)->isPast()) {
-            // $message->delete(); // Optional: cleanup
+            $message->delete(); // Optional: clean up expired message
             return Inertia::render('errors/Message404');
         }
 
-        $userAgent = request()->header('User-Agent');
+        $userAgent = request()->header('User-Agent', '');
 
         // List of common preview bot keywords
         $knownBots = [
@@ -119,7 +120,7 @@ class MessageController extends Controller
             if (stripos($userAgent, $bot) !== false) {
                 // Show preview but do NOT decrypt or delete
                 return Inertia::render('BotPreview', [
-                    'messagePreview' => 'This message is encrypted and will be shown when opened by the recipient.',
+                    'messagePreview' => '🔒 This message is encrypted and will only be revealed when opened by the intended recipient.',
                     'sender' => $message->sender ?? 'Anonymous',
                     'receiver' => $message->receiver ?? 'Anonymous',
                 ]);
@@ -137,7 +138,10 @@ class MessageController extends Controller
         $sender = $message->sender ?? 'Anonymous';
         $receiver = $message->receiver ?? 'Anonymous';
 
-        $message->delete(); // Delete after successful view by a human
+        // ✅ Delete only if it’s a one-time access message (no expires_at)
+        if (!$message->expires_at) {
+            $message->delete();
+        }
 
         return Inertia::render('ShowMessage', [
             'message' => $decryptedMessage,
