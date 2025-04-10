@@ -16,6 +16,9 @@ Route::get('/how-it-works', function () {
 Route::get('/support', function () {
     return Inertia::render('Support');
 })->name('Support');
+Route::get('/team', function () {
+    return Inertia::render('Team');
+})->name('Team');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {

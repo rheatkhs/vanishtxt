@@ -1,6 +1,6 @@
 import { Link, usePage } from '@inertiajs/react'; // ✅ Import usePage to detect current route
 import { motion } from 'framer-motion';
-import { Headphones, Home, Info, LogIn } from 'lucide-react';
+import { CodeXml, Headphones, Home, Info } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function Navbar() {
@@ -37,7 +37,7 @@ export default function Navbar() {
                             <NavItem href="/" text="Home" active={url === '/'} />
                             <NavItem href="/about" text="About" active={url === '/about'} />
                             <NavItem href="/support" text="Support" active={url === '/support'} />
-                            <NavItem href="/login" text="Sign In" active={url === '/login'} />
+                            <NavItem href="/team" text="Team" active={url === '/team'} />
                         </div>
                     </div>
                 </motion.nav>
@@ -54,7 +54,7 @@ export default function Navbar() {
                     <NavItemMobile href="/" text="Home" icon={<Home />} active={url === '/'} />
                     <NavItemMobile href="/about" text="About" icon={<Info />} active={url === '/about'} />
                     <NavItemMobile href="/support" text="Support" icon={<Headphones />} active={url === '/support'} />
-                    <NavItemMobile href="/login" text="Sign In" icon={<LogIn />} active={url === '/login'} />
+                    <NavItemMobile href="/team" text="Team" icon={<CodeXml />} active={url === '/team'} />
                 </motion.div>
             )}
         </>
