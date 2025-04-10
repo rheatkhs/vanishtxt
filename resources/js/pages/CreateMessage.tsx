@@ -2,6 +2,7 @@ import { Head, useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { RefreshCcw } from 'lucide-react';
 import { FormEvent, useEffect, useState } from 'react';
+import Toast from './components/Toast';
 
 export default function CreateMessage() {
     const { data, setData, post, processing, errors } = useForm({
@@ -13,6 +14,7 @@ export default function CreateMessage() {
     });
 
     const [captchaReady, setCaptchaReady] = useState(false);
+    const [captchaError, setCaptchaError] = useState(false);
 
     useEffect(() => {
         const script = document.createElement('script');
@@ -30,7 +32,10 @@ export default function CreateMessage() {
         const token = (document.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement)?.value;
 
         if (!token) {
-            alert('Please complete the CAPTCHA.');
+            setCaptchaError(true);
+            setTimeout(() => {
+                setCaptchaError(false);
+            }, 3000);
             return;
         }
 
@@ -70,20 +75,19 @@ export default function CreateMessage() {
                     className="mt-8 w-full max-w-lg rounded-xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-lg"
                 >
                     <form onSubmit={handleSubmit} className="space-y-4">
+                        {' '}
                         <motion.input
                             className="w-full rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white placeholder-gray-400 transition duration-300 focus:border-white focus:outline-none"
                             placeholder="Your Name (optional)"
                             value={data.sender}
                             onChange={(e) => setData('sender', e.target.value)}
                         />
-
                         <motion.input
                             className="w-full rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white placeholder-gray-400 transition duration-300 focus:border-white focus:outline-none"
                             placeholder="Receiver's Name (optional)"
                             value={data.receiver}
                             onChange={(e) => setData('receiver', e.target.value)}
                         />
-
                         <motion.textarea
                             className="w-full resize-none overflow-hidden rounded-lg border border-[#ff4ecb] bg-transparent p-3 text-white placeholder-gray-400 transition duration-300 focus:border-white focus:outline-none"
                             placeholder="Type your secret message..."
@@ -91,7 +95,6 @@ export default function CreateMessage() {
                             value={data.message}
                             onChange={(e) => setData('message', e.target.value)}
                         />
-
                         <div className="space-y-4">
                             <div className="flex flex-wrap gap-3">
                                 {[
@@ -152,7 +155,6 @@ export default function CreateMessage() {
                                 </p>
                             </div>
                         </div>
-
                         {/* Cloudflare CAPTCHA */}
                         <div className="flex w-full justify-center">
                             <div
@@ -163,7 +165,6 @@ export default function CreateMessage() {
                             ></div>
                         </div>
                         {errors?.['cf-turnstile-response'] && <p className="text-sm text-red-400">{errors['cf-turnstile-response']}</p>}
-
                         <motion.button
                             type="submit"
                             disabled={processing || !data.message.trim() || !data.expires_at}
@@ -180,6 +181,7 @@ export default function CreateMessage() {
                             )}
                         </motion.button>
                     </form>
+                    <Toast show={captchaError} message="⚠️ Please complete the CAPTCHA before submitting." />
                 </motion.div>
             </motion.div>
         </>
