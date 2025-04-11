@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { Clipboard, RefreshCcw, Share2 } from 'lucide-react';
+import { ArrowRight, Clipboard, RefreshCcw, Share2 } from 'lucide-react';
 import { useState } from 'react';
 
 interface GeneratedMessageProps {
@@ -71,10 +71,11 @@ export default function GeneratedMessage({ generatedLink, sender = 'Anonymous', 
                     </motion.h1>
 
                     <div className="mb-6 rounded-md border border-[#ff4ecb] bg-black/20 px-4 py-3 text-center text-sm text-gray-300 shadow-inner">
-                        <span className="block">
-                            <span className="font-medium text-[#ff4ecb]">{sender}</span> ➡️{' '}
+                        <div className="flex items-center justify-center gap-2">
+                            <span className="font-medium text-[#ff4ecb]">{sender}</span>
+                            <ArrowRight size={16} className="text-gray-400" />
                             <span className="font-medium text-[#ff7f50]">{receiver}</span>
-                        </span>
+                        </div>
                         {expiresMessage && (
                             <div className="mt-2 text-xs text-gray-400">
                                 <span className="italic">{expiresMessage}</span>

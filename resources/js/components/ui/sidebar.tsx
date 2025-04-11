@@ -22,6 +22,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { ShieldCheck } from 'lucide-react';
+import { Link } from '@inertiajs/react';
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -329,12 +331,21 @@ function SidebarInput({
 
 function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div
-      data-slot="sidebar-header"
-      data-sidebar="header"
-      className={cn("flex flex-col gap-2 p-2", className)}
+
+    <Link
+      href="/dashboard"
+      className={cn(
+        'flex items-center gap-2 p-4 text-white transition hover:bg-white/10 hover:backdrop-blur-lg rounded-md',
+        className
+      )}
       {...props}
-    />
+    >
+        <ShieldCheck size={20} className="text-pink-400 shrink-0" />
+        <span className="text-lg font-bold whitespace-nowrap transition-all duration-300">
+          VanishTXT Admin
+        </span>
+    </Link>
+
   )
 }
 
