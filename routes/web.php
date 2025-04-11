@@ -27,6 +27,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('messages', function () {
         return Inertia::render('admin/messages');
     })->name('messages');
+    Route::get('logs', function () {
+        return Inertia::render('admin/logs');
+    })->name('logs');
 });
 
 require __DIR__ . '/settings.php';
